@@ -12,15 +12,12 @@ class TrackSelector{
     selectTrackByVehicleType(VehicleType){
         switch (VehicleType) {
             case "BIKE_TRACK":
-                
                 return bikeTrack.bikeTrack
                 break;
             case "CAR_TRACK":
-                
                 return carTrack.carTrack
                 break;
             case "SUV_TRACK":
-                
                 return suvTrack.suvTrack
                 break;
           }
