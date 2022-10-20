@@ -27,7 +27,7 @@ class CarTrack {
                      slotAvailable: true
                  }
          }
-         else if(this.regularTracks.get(checkSlot).exitTime<=bookTimeInMinutes){
+         else if(this.regularTracks.get(check_Slot).exitTime<=bookTimeInMinutes){
             return {
                 trackType: trackType.REGULAR_CAR_TRACK,
                 slotNumber: check_Slot,
