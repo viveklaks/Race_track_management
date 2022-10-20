@@ -1,0 +1,5 @@
+module.exports.REGULAR_BIKE_TRACK = "REGULAR_BIKE_TRACK"
+module.exports.REGULAR_CAR_TRACK = "REGULAR_CAR_TRACK"	 
+module.exports.VIP_CAR_TRACK = "VIP_CAR_TRACK"	 
+module.exports.REGULAR_SUV_TRACK = "REGULAR_SUV_TRACK"	 
+module.exports.VIP_SUV_TRACK = "VIP_SUV_TRACK"
