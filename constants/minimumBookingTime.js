@@ -1,0 +1,1 @@
+module.exports.MINIMUM_BOOKING_TIME_IN_MINUTE = 180

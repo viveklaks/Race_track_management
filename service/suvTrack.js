@@ -3,6 +3,8 @@ const tracksSlotSet = require("./tracksSlotSet.js")
 const numberOfTracksAvailable = require("../constants/numberOfTracksAvailable.js")
 const trackType = require("../constants/trackType.js")
 const trackRates= require("../constants/trackRates.js")
+const minimumBookingTime = require("../constants/minimumBookingTime.js")
+const check_Slot = require("../constants/checkSlot.js")
 class SuvTrack {
     constructor(){
         if(SuvTrack.instance == null){
@@ -16,7 +18,7 @@ class SuvTrack {
 
     }
     checkSlotAvailablity(bookTimeInMinutes){
-        let checkSlot = 1
+        let checkSlot = check_Slot.CHECK_SLOT
         for(checkSlot ;checkSlot<= numberOfTracksAvailable.REGULAR_SUV_TRACKS_AVAILABLE;checkSlot++){
          if(this.regularTracks.get(checkSlot).occupied==0){
 
@@ -36,7 +38,7 @@ class SuvTrack {
              continue
          }
         }
-        let vipCheckSlot = 1
+        let vipCheckSlot = check_Slot.VIP_CHECK_SLOT
         for( vipCheckSlot ;vipCheckSlot<= numberOfTracksAvailable.VIP_SUV_TRACKS_AVAILABLE;vipCheckSlot++){
            
             if(this.vipTracks.get(vipCheckSlot).occupied==0){
@@ -65,13 +67,13 @@ class SuvTrack {
          
      }
      setSlot(slotSpot,entryTime){
-        const minumumMinuteOfBooking = 180
+        
         
         if(trackType.VIP_SUV_TRACK == slotSpot.trackType){
             this.vipTracks.set(slotSpot.slotNumber,{
                 occupied:1,
                 entryTime: entryTime,
-                exitTime : entryTime+minumumMinuteOfBooking
+                exitTime : entryTime+minimumBookingTime.MINIMUM_BOOKING_TIME_IN_MINUTE
             })
             return {slotSpotBooked:true,
                 vipInitialBookingBill: trackRates.VIP_SUV_TRACKS_RATE*3
@@ -81,7 +83,7 @@ class SuvTrack {
             this.regularTracks.set(slotSpot.slotNumber,{
                 occupied:1,
                 entryTime: entryTime,
-                exitTime : entryTime+minumumMinuteOfBooking
+                exitTime : entryTime+minimumBookingTime.MINIMUM_BOOKING_TIME_IN_MINUTE
             })
             return {slotSpotBooked:true,
                 initialBookingBill: trackRates.REGULAR_SUV_TRACKS_RATE*3

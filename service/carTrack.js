@@ -3,6 +3,8 @@ const tracksSlotSet = require("./tracksSlotSet.js")
 const numberOfTracksAvailable = require("../constants/numberOfTracksAvailable.js")
 const trackType = require("../constants/trackType.js")
 const trackRates= require("../constants/trackRates.js")
+const minimumBookingTime = require("../constants/minimumBookingTime.js")
+const checkSlot = require("../constants/checkSlot.js")
 class CarTrack {
     constructor(){
         if(CarTrack.instance == null){
@@ -16,19 +18,19 @@ class CarTrack {
 
     }
     checkSlotAvailablity(bookTimeInMinutes){
-        let checkSlot = 1
-        for(checkSlot;checkSlot<= numberOfTracksAvailable.REGULAR_CAR_TRACKS_AVAILABLE;checkSlot++){
-         if(this.regularTracks.get(checkSlot).occupied==0){
+        let check_Slot = checkSlot.CHECK_SLOT 
+        for(check_Slot.CHECK_SLOT;check_Slot<= numberOfTracksAvailable.REGULAR_CAR_TRACKS_AVAILABLE;check_Slot++){
+         if(this.regularTracks.get(check_Slot).occupied==0){
                  return {
                      trackType: trackType.REGULAR_CAR_TRACK,
-                     slotNumber: checkSlot,
+                     slotNumber: check_Slot,
                      slotAvailable: true
                  }
          }
          else if(this.regularTracks.get(checkSlot).exitTime<=bookTimeInMinutes){
             return {
                 trackType: trackType.REGULAR_CAR_TRACK,
-                slotNumber: checkSlot,
+                slotNumber: check_Slot,
                 slotAvailable: true
             }
         }
@@ -36,7 +38,7 @@ class CarTrack {
              continue
          }
         }
-        let vipCheckSlot = 1
+        let vipCheckSlot = checkSlot.VIP_CHECK_SLOT
         for(vipCheckSlot;vipCheckSlot<= numberOfTracksAvailable.VIP_CAR_TRACKS_AVAILABLE;vipCheckSlot++){
             if(this.vipTracks.get(vipCheckSlot).occupied==0){
                     return {
@@ -63,13 +65,13 @@ class CarTrack {
          
      }
      setSlot(slotSpot,entryTime){
-        const minumumMinuteOfBooking = 180
+        
         
         if(trackType.VIP_CAR_TRACK == slotSpot.trackType){
             this.vipTracks.set(slotSpot.slotNumber,{
                 occupied:1,
                 entryTime: entryTime,
-                exitTime : entryTime+minumumMinuteOfBooking
+                exitTime : entryTime+minimumBookingTime.MINIMUM_BOOKING_TIME_IN_MINUTE
             })
             return {slotSpotBooked:true,
                 vipInitialBookingBill: trackRates.VIP_CAR_TRACKS_RATE*3
@@ -79,7 +81,7 @@ class CarTrack {
             this.regularTracks.set(slotSpot.slotNumber,{
                 occupied:1,
                 entryTime: entryTime,
-                exitTime : entryTime+minumumMinuteOfBooking
+                exitTime : entryTime+minimumBookingTime.MINIMUM_BOOKING_TIME_IN_MINUTE
             })
             return {slotSpotBooked:true,
                 initialBookingBill: trackRates.REGULAR_CAR_TRACKS_RATE*3

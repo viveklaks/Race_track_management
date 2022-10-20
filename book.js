@@ -1,6 +1,9 @@
 const trackSelector = require("./service/trackSelector")
 const bookingTime = require("./constants/bookingTime")
 const availableTime = require("./constants/availableTime")
+const bookConstants = require("./constants/bookConstants.js")
+const tracksRates = require("./constants/trackRates.js")
+const billConstants = require("./constants/billConstants.js")
 class Booking {
     constructor(){
         if(Booking.instance ==null){
@@ -10,15 +13,15 @@ class Booking {
         return Booking.instance
     }
     bookingVehicleEntry(bookingData){
-        const BOOK=0
-        const VEHICLE_TYPE =1
-        const VEHICLE_NUMBER =2
-        const BOOKING_TIME = 3
-        const MINIMUM_BOOKING_HOURS=3
-        const HOUR_PART=0
-        const MINUTE_PART=1
-        const DECIMAL_FORMAT = 10
-        const MINUTES_IN_AN_HOUR =60
+        const BOOK=bookConstants.BOOK
+        const VEHICLE_TYPE =bookConstants.VEHICLE_TYPE
+        const VEHICLE_NUMBER =bookConstants.VEHICLE_NUMBER
+        const BOOKING_TIME = bookConstants.BOOKING_TIME
+        const MINIMUM_BOOKING_HOURS=bookConstants.MINIMUM_BOOKING_HOURS
+        const HOUR_PART=bookConstants.HOUR_PART
+        const MINUTE_PART=bookConstants.MINUTE_PART
+        const DECIMAL_FORMAT = bookConstants.DECIMAL_FORMAT
+        const MINUTES_IN_AN_HOUR =bookConstants.MINUTES_IN_AN_HOUR
         if(bookingData[BOOK]=='BOOK'){
             this.bookingVehicleData.set(bookingData[VEHICLE_NUMBER ], {
                 vehicleNumber : bookingData[VEHICLE_NUMBER ],
@@ -41,12 +44,12 @@ class Booking {
                 isValidBookingTime:this.checkValidBookingTime(bookingData[BOOKING_TIME].split(":")[HOUR_PART],bookingData[BOOKING_TIME].split(":")[MINUTE_PART]),
                 bookingStatus: '',
                 isValidExitTime:NaN,
-                intialBookingBill: 0,
-                additionalBill : 0,
-                finalBill: 0,
-                vipIntialBookingBill: 0,
-                vipAdditionalBill : 0,
-                vipFinalBill: 0
+                intialBookingBill: billConstants.INITIAL_BOOKING_BILL,
+                additionalBill : billConstants.INITIAL_ADDITIONAL_BILL,
+                finalBill: billConstants.INITIAL_FINAL_BILL,
+                vipIntialBookingBill: billConstants.INITIAL_VIP_INITIAL_BOOKING_BILL,
+                vipAdditionalBill : billConstants.INITIAL_VIP_ADDITIONAL_BILL,
+                vipFinalBill: billConstants.INITIAL_VIP_FINAL_BILL
     
             })
             
@@ -57,7 +60,7 @@ class Booking {
 
     }
     checkValidBookingTime(hour,minute){
-        const DECIMAL_FORMAT = 10
+        const DECIMAL_FORMAT = bookConstants.DECIMAL_FORMAT
         const hourParsed = parseInt(hour, DECIMAL_FORMAT )
         const minuteParsed = parseInt(minute , DECIMAL_FORMAT )
         if(hourParsed>=bookingTime.BOOKING_OPEN_HOUR && hourParsed<bookingTime.BOOKING_CLOSE_HOUR){
@@ -107,12 +110,12 @@ class Booking {
     }
     addtionalHours(exitData){
        
-        const VEHICLE_NUMBER  =1
-        const EXIT_TIME =2
-        const HOUR_PART=0
-        const MINUTE_PART=1
-        const DECIMAL_FORMAT = 10
-        const MINUTES_IN_AN_HOUR = 60
+        const VEHICLE_NUMBER  =bookConstants.ADDED_VEHICLE_NUMBER
+        const EXIT_TIME =bookConstants.EXIT_TIME
+        const HOUR_PART=bookConstants.HOUR_PART
+        const MINUTE_PART= bookConstants.MINUTE_PART
+        const DECIMAL_FORMAT = bookConstants.DECIMAL_FORMAT
+        const MINUTES_IN_AN_HOUR = bookConstants.MINUTES_IN_AN_HOUR
         
             
                 return   {vehicleNumber: exitData[VEHICLE_NUMBER],
@@ -124,7 +127,7 @@ class Booking {
         
     }
     checkValidExitTime(hour,minute){
-        const DECIMAL_FORMAT  = 10
+        const DECIMAL_FORMAT  = bookConstants.DECIMAL_FORMAT
         const hourParsed = parseInt(hour, DECIMAL_FORMAT )
         const minuteParsed = parseInt(minute , DECIMAL_FORMAT )
         if(hourParsed>=availableTime.TRACK_OPEN_HOUR && hourParsed<availableTime.TRACK_CLOSE_HOUR ){
@@ -143,11 +146,11 @@ class Booking {
 
     }
     additionalBilling(minimumBookingExitTime,exitTime){
-        const gracePeriod = 15
-        const noAdditionalTime = 0
+        const gracePeriod = bookConstants.GRACE_PERIOD
+        const noAdditionalTime = bookConstants.NO_ADDITIONAL_TIME
         if((exitTime -minimumBookingExitTime) > gracePeriod ){
-            const additionalCostPerHour = 50
-            const MINUTES_IN_AN_HOUR = 60
+            const additionalCostPerHour = tracksRates.ADDITIONAL_HOUR 
+            const MINUTES_IN_AN_HOUR = bookConstants.MINUTES_IN_AN_HOUR
             const additionBill = Math.ceil((exitTime -minimumBookingExitTime)/MINUTES_IN_AN_HOUR )*additionalCostPerHour
             return additionBill
 
@@ -158,7 +161,7 @@ class Booking {
         
     }
     addtionalTimingExtension(ADDITIONAL_LIST,VEHICLE_NUMBER){
-        //const VEHICLE_NUMBER = 1
+        
             const addtionalTimeData = this.addtionalHours(ADDITIONAL_LIST)
             
             this.bookingVehicleData.get(ADDITIONAL_LIST[VEHICLE_NUMBER]).exitTime = addtionalTimeData.exitTime
@@ -176,8 +179,8 @@ class Booking {
             } 
     }
     revenueCalculator(){
-        let regularRevenue = 0;
-            let vipRevenue = 0;
+        let regularRevenue = bookConstants.INITIAL_REGULAR_REVENUE;
+            let vipRevenue = bookConstants.INITIAL_VIP_REVENUE;
             this.bookingVehicleData.forEach((map)=>{
                 regularRevenue += map.intialBookingBill+map.additionalBill
                 vipRevenue +=map.vipIntialBookingBill+map.vipAdditionalBill  

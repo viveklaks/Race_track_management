@@ -3,6 +3,8 @@ const tracksSlotSet = require("./tracksSlotSet.js")
 const numberOfTracksAvailable = require("../constants/numberOfTracksAvailable.js")
 const trackType = require("../constants/trackType.js")
 const trackRates= require("../constants/trackRates.js")
+const minimumBookingTime = require("../constants/minimumBookingTime.js")
+const check_Slot = require("../constants/checkSlot.js")
 class BikeTrack {
     constructor(){
         if(BikeTrack.instance == null){
@@ -15,7 +17,7 @@ class BikeTrack {
     }
     
     checkSlotAvailablity(bookTimeInMinutes){
-        let checkSlot = 1
+        let checkSlot = check_Slot.CHECK_SLOT
        for(checkSlot;checkSlot<= numberOfTracksAvailable.REGULAR_BIKE_TRACKS_AVAILABLE;checkSlot++){
         if(this.regularTracks.get(checkSlot).occupied==0){
             
@@ -45,12 +47,12 @@ class BikeTrack {
     }
     setSlot(slotSpot,entryTime){
         
-        const minumumMinuteOfBooking = 180
+        
         if(trackType.REGULAR_BIKE_TRACK == slotSpot.trackType){
         this.regularTracks.set(slotSpot.slotNumber,{
             occupied:1,
             entryTime: entryTime,
-            exitTime : entryTime+minumumMinuteOfBooking
+            exitTime : entryTime+minimumBookingTime.MINIMUM_BOOKING_TIME_IN_MINUTE
         })
         
         return {slotSpotBooked:true,

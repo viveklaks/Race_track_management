@@ -1,3 +1,4 @@
+const tracksSlotSetConstants = require("../constants/tracksSlotSetConstants.js")
 class TracksSlotSet {
     constructor(){
         if(TracksSlotSet.instance == null){
@@ -9,12 +10,12 @@ class TracksSlotSet {
     }
 
    setTracksSlot(track, numberOfSlots){
-
-        for(let slot = 1 ;slot <= numberOfSlots;slot++){
+        let slot = tracksSlotSetConstants.INITIAL_SLOT
+        for(slot ;slot <= numberOfSlots;slot++){
             track.set(slot,{
-                occupied:0,
-                entryTime: 0,
-                exitTime : 0
+                occupied:tracksSlotSetConstants.INITIALLY_OCCUPIED,
+                entryTime: tracksSlotSetConstants.INITIALLY_ENTRY_TIME,
+                exitTime : tracksSlotSetConstants.INITIALLY_EXIT_TIME
             })
         }
         return track

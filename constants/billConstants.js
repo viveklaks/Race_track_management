@@ -1,0 +1,6 @@
+module.exports.INITIAL_BOOKING_BILL= 0
+module.exports.INITIAL_ADDITIONAL_BILL=0
+module.exports.INITIAL_FINAL_BILL=0
+module.exports.INITIAL_VIP_INITIAL_BOOKING_BILL=0
+module.exports.INITIAL_VIP_ADDITIONAL_BILL =0
+module.exports.INITIAL_VIP_FINAL_BILL= 0
